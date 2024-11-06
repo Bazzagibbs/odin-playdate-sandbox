@@ -1,0 +1,5 @@
+/out_sim/
+/out_dev/
+*.exe
+*.dll
+*.pdb
