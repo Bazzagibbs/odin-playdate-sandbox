@@ -1,5 +1,6 @@
 /out_sim/
 /out_dev/
+/.sentry-native/
 *.exe
 *.dll
 *.pdb

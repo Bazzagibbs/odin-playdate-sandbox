@@ -3,6 +3,8 @@ package playdate_sandbox
 import "base:runtime"
 import "playdate"
 import "core:math"
+import "core:log"
+import "core:fmt"
 
 pd: ^playdate.Api
 ctx: runtime.Context
@@ -18,7 +20,7 @@ Game_Data :: struct {
 eventHandler :: proc "c" (pd_api: ^playdate.Api, event: playdate.System_Event, arg: u32) -> i32 {
         #partial switch event {
         case .Init:
-                ctx = playdate.playdate_context(pd_api)
+                ctx = playdate.playdate_context_create(pd_api)
                 context = ctx
                 
                 pd = pd_api
@@ -27,6 +29,9 @@ eventHandler :: proc "c" (pd_api: ^playdate.Api, event: playdate.System_Event, a
                 game_data.bitmap = pd.graphics.new_bitmap(48, 48, {solid = .Black})
 
                 pd.system.set_update_callback(update, game_data)
+
+        case .Terminate:
+                playdate.playdate_context_destroy(&ctx)
         }
 
         return 0;
@@ -67,6 +72,8 @@ update :: proc "c" (user_data: rawptr) -> playdate.Update_Result {
         )
 
         game_data.counter += 0.1
+
+        log.info(fmt.tprintf("%v", game_data.counter))
 
         return .Update_Display
 }
